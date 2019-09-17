@@ -20,5 +20,6 @@ public interface CategoryService {
     ServerResponse updateNameByPd(Category c);
 
     /*获取当前分类id及递归子节点*/
-    ServerResponse getDeepCategory(Integer parentId);
+    ServerResponse get_deep_category(Integer parentId);
+
 }

@@ -71,7 +71,7 @@ public class UserController {
     public ServerResponse getUserInfo(HttpSession session) {
         Users user = (Users) session.getAttribute(Const.LOGINUSER);
         if (user == null) {
-            return ServerResponse.defeatedRS(Const.UserEnum.NO_LOGIN.getCode(), Const.UserEnum.NO_LOGIN.getDesc());
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN.getCode(), Const.UserEnum.NOT_LOGIN.getDesc());
         }
         return ServerResponse.successRS(user);
     }
@@ -81,7 +81,7 @@ public class UserController {
     public ServerResponse<Users> updateInformation(Users users, HttpSession session) {
         Users users2 = (Users) session.getAttribute(Const.LOGINUSER);
         if (users2 == null) {
-            return ServerResponse.defeatedRS(Const.UserEnum.NO_LOGIN.getCode(), Const.UserEnum.NO_LOGIN.getDesc());
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN.getCode(), Const.UserEnum.NOT_LOGIN.getDesc());
         }
         users.setId(users2.getId());
         users.setUsername(users2.getUsername());
@@ -96,7 +96,7 @@ public class UserController {
     public ServerResponse<Users> getInforamtion(HttpSession session) {
         Users users = (Users) session.getAttribute(Const.LOGINUSER);
         if (users == null) {
-            return ServerResponse.defeatedRS(10, Const.USER_NO_LOGIN_NO_MSG);
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN.getCode(), Const.UserEnum.NOT_LOGIN.getDesc());
         }
         ServerResponse<Users> sr = userService.getInforamtion(users);
         return sr;
@@ -106,7 +106,7 @@ public class UserController {
     @GetMapping("logout.do")
     public ServerResponse<Users> logout(HttpSession session) {
         session.removeAttribute(Const.LOGINUSER);
-        return ServerResponse.successRS("退出成功");
+        return ServerResponse.successRS(Const.UserEnum.LOGIN_OUT_SUCCESS.getCode(),Const.UserEnum.LOGIN_OUT_SUCCESS.getDesc());
     }
 
     //    忘记密码

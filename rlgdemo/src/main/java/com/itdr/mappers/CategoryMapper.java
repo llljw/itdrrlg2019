@@ -25,5 +25,6 @@ public interface CategoryMapper {
     int updateNameByPd(Category c);
 
     /*获取当前分类id及递归子节点*/
-    List<Integer> getChildsByPd(Category parentId);
+    List<Category> getChildsByPd(Integer parentId);
+
 }

@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         }
         Users users = usersMapper.selectByNameAndPassword(username, password);
         if (users == null) {
-            sr = ServerResponse.defeatedRS(Const.USER_CUO_MSG);
+            sr = ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
             return sr;
         }
         sr = ServerResponse.successRS(users);
@@ -60,16 +60,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<Users> login(String username, String password) {
         if (username == null || username.equals("")) {
-            return ServerResponse.defeatedRS("用户名不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
         }
         if (password == null || password.equals("")) {
-            return ServerResponse.defeatedRS("密码不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.PSD_NULL.getCode(),Const.UserEnum.PSD_NULL.getDesc());
         }
 
 //        根据用户名查找是否存在该用户
-        int i = usersMapper.selectByUserNameOrEmail(username, "username");
+        int i = usersMapper.selectByUserNameOrEmail(username,Const.USERNAME);
         if (i <= 0) {
-            return ServerResponse.defeatedRS(101, "用户不存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
         }
 
 //        md5加密
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         Users users = usersMapper.selectByUsernameAndPassword(username, md5Code);
 
         if (users == null) {
-            return ServerResponse.defeatedRS("账户或密码错误");
+            return ServerResponse.defeatedRS(Const.UserEnum.PSD_WRONG.getCode(),Const.UserEnum.PSD_WRONG.getDesc());
         }
 
 
@@ -93,22 +93,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<Users> register(Users u) {
         if (u.getUsername() == null || u.getUsername().equals("")) {
-            return ServerResponse.defeatedRS(1, "账户名不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
         }
         if (u.getPassword() == null || u.getPassword().equals("")) {
-            return ServerResponse.defeatedRS(1, "密码不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.PSD_NULL.getCode(),Const.UserEnum.PSD_NULL.getDesc());
         }
 
         //检查注册用户名是否存在
-        int i2 = usersMapper.selectByUserNameOrEmail(u.getUsername(), "username");
+        int i2 = usersMapper.selectByUserNameOrEmail(u.getUsername(), Const.USERNAME);
         if (i2 > 0) {
-            return ServerResponse.defeatedRS(1, "用户已存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_USER.getCode(),Const.UserEnum.HAVE_ONE_USER.getDesc());
         }
 
         //检查注册邮箱是否存在
-        int i3 = usersMapper.selectByUserNameOrEmail(u.getEmail(), "email");
+        int i3 = usersMapper.selectByUserNameOrEmail(u.getEmail(), Const.EMAIL);
         if (i3 > 0) {
-            return ServerResponse.defeatedRS(2, "邮箱已注册");
+            return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_EMAIL.getCode(),Const.UserEnum.HAVE_ONE_EMAIL.getDesc());
         }
 
 //        md5加密
@@ -117,9 +117,9 @@ public class UserServiceImpl implements UserService {
         //注册用户
         int i = usersMapper.insert(u);
         if (i <= 0) {
-            return ServerResponse.defeatedRS(1, "注册失败");
+            return ServerResponse.defeatedRS(Const.UserEnum.REGISTER_FAIL.getCode(),Const.UserEnum.REGISTER_FAIL.getDesc());
         }
-        return ServerResponse.successRS(null, "用户注册成功");
+        return ServerResponse.successRS(Const.UserEnum.REGISTER_SUCCESS.getCode(),Const.UserEnum.REGISTER_SUCCESS.getDesc());
     }
 
     //    检查用户名/邮箱是否有效
@@ -127,20 +127,20 @@ public class UserServiceImpl implements UserService {
     public ServerResponse<Users> check_valid(String str, String type) {
         //判断
         if (str == null || str.equals("")) {
-            return ServerResponse.defeatedRS("参数不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.MSG_NULL.getCode(),Const.UserEnum.MSG_NULL.getDesc());
         }
         if (type == null || type.equals("")) {
-            return ServerResponse.defeatedRS("参数类型不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.MSG_NULL.getCode(),Const.UserEnum.MSG_NULL.getDesc());
         }
 
         int i = usersMapper.selectByUserNameOrEmail(str, type);
         if (i > 0 && type.equals("username")) {
-            return ServerResponse.defeatedRS(1, "用户名已存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_USER.getCode(),Const.UserEnum.HAVE_ONE_USER.getDesc());
         }
         if (i > 0 && type.equals("email")) {
-            return ServerResponse.defeatedRS(2, "邮箱已注册");
+            return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_EMAIL.getCode(),Const.UserEnum.HAVE_ONE_EMAIL.getDesc());
         }
-        return ServerResponse.successRS(null, "校验成功");
+        return ServerResponse.successRS(Const.UserEnum.VERIFY_SUCCESS.getCode(),Const.UserEnum.VERIFY_SUCCESS.getDesc());
     }
 
     //    登录状态更新个人信息
@@ -148,13 +148,13 @@ public class UserServiceImpl implements UserService {
     public ServerResponse update_information(Users users) {
         int i2 = usersMapper.selectByEmailAndId(users.getEmail(), users.getId());
         if (i2 > 0) {
-            return ServerResponse.defeatedRS("要更新的用户邮箱已存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_EMAIL.getCode(),Const.UserEnum.HAVE_ONE_EMAIL.getDesc());
         }
         int i = usersMapper.updateByPrimaryKeySelective(users);
         if (i <= 0) {
-            return ServerResponse.defeatedRS("更新失败");
+            return ServerResponse.defeatedRS(Const.UserEnum.UPDATE_MSG_FAIL.getCode(),Const.UserEnum.UPDATE_MSG_FAIL.getDesc());
         }
-        return ServerResponse.successRS("更新个人信息成功");
+        return ServerResponse.successRS(Const.UserEnum.UPDATE_MSG_SUCCESS.getCode(),Const.UserEnum.UPDATE_MSG_SUCCESS.getDesc());
     }
 
     //    获取当前登录用户详细信息
@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
     public ServerResponse<Users> getInforamtion(Users users) {
         Users u = usersMapper.selectByPrimaryKey(users.getId());
         if (u == null) {
-            return ServerResponse.defeatedRS("用户不存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
         }
         u.setPassword("");
         return ServerResponse.successRS(u);
@@ -172,15 +172,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<Users> forgetGetQuestion(String username) {
         if (username == null || username.equals("")) {
-            return ServerResponse.defeatedRS(100, "用户名不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
         }
         int i = usersMapper.selectByUserNameOrEmail(username, Const.USERNAME);
         if (i <= 0) {
-            return ServerResponse.defeatedRS(101, "用户名不存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
         }
         String s = usersMapper.selectByUserName(username);
         if (s == null || "".equals(s)) {
-            return ServerResponse.defeatedRS(1, "该用户未设置找回密码问题");
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_FIND_PSD_ANSWER.getCode(),Const.UserEnum.NOT_FIND_PSD_ANSWER.getDesc());
         }
         ServerResponse sr = ServerResponse.successRS(s);
         return sr;
@@ -190,25 +190,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<Users> forgetCheckAnswer(String username, String question, String answer) {
         if (username == null || username.equals("")) {
-            return ServerResponse.defeatedRS(100, "用户名不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
         }
         if (question == null || question.equals("")) {
-            return ServerResponse.defeatedRS(101, "问题不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.QUESTION_NULL.getCode(),Const.UserEnum.QUESTION_NULL.getDesc());
         }
         if (answer == null || answer.equals("")) {
-            return ServerResponse.defeatedRS(101, "答案不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.ANSWER_NULL.getCode(),Const.UserEnum.ANSWER_NULL.getDesc());
         }
 
         //判断用户是否存在
         String s = usersMapper.selectByUserName(username);
         if(s == null || "".equals(s)){
-            return ServerResponse.defeatedRS("用户不存在");
+            return ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
         }
 
 
         int i = usersMapper.selectByUsernameAndQuestionAndAnswer(username, question, answer);
         if (i <= 0) {
-            return ServerResponse.defeatedRS(1, "问题答案错误");
+            return ServerResponse.defeatedRS(Const.UserEnum.ANSWER_WRONG.getCode(),Const.UserEnum.ANSWER_WRONG.getDesc());
         }
         //    产生随机字符令牌
         String token = UUID.randomUUID().toString();
@@ -223,23 +223,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<Users> forgetResetPassword(String username, String passwordNew, String forgetToken) {
         if (username == null || "".equals(username)) {
-            return ServerResponse.defeatedRS(100, "用户名不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
         }
         if (passwordNew == null || "".equals(passwordNew)) {
-            return ServerResponse.defeatedRS(100, "新密码不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.NEW_PSD_NULL.getCode(),Const.UserEnum.NEW_PSD_NULL.getDesc());
         }
         if (forgetToken == null || "".equals(forgetToken)) {
-            return ServerResponse.defeatedRS(104, "非法的token");
+            return ServerResponse.defeatedRS(Const.UserEnum.NO_TOKEN.getCode(),Const.UserEnum.NO_TOKEN.getDesc());
         }
 
         //    判断缓存中的token
         String token = TokenCache.get("token_" + username);
         if (token == null || "".equals(token)) {
-            return ServerResponse.defeatedRS(103, "token已失效");
+            return ServerResponse.defeatedRS(Const.UserEnum.LOSE_TOKEN.getCode(),Const.UserEnum.LOSE_TOKEN.getDesc());
         }
         //    不成功的情况下
         if (!token.equals(forgetToken)) {
-            return ServerResponse.defeatedRS(104, "非法的token");
+            return ServerResponse.defeatedRS(Const.UserEnum.NO_TOKEN.getCode(),Const.UserEnum.NO_TOKEN.getDesc());
         }
 
         //    md5加密
@@ -247,19 +247,19 @@ public class UserServiceImpl implements UserService {
 
         int i = usersMapper.updateByUsernameAndPassword(username, md5Code);
         if (i <= 0) {
-            return ServerResponse.defeatedRS(100, "修改密码失败");
+            return ServerResponse.defeatedRS(Const.UserEnum.ALTER_PSD_FAIL.getCode(),Const.UserEnum.ALTER_PSD_FAIL.getDesc());
         }
-        return ServerResponse.successRS("修改密码成功");
+        return ServerResponse.successRS(Const.UserEnum.ALTER_PSD_SUCCESS.getCode(),Const.UserEnum.ALTER_PSD_SUCCESS.getDesc());
     }
 
     //    登录状态修改密码
     @Override
     public ServerResponse<Users> resetPassword(Users users, String passwordOld, String passwordNew) {
         if (passwordOld == null || "".equals(passwordOld)) {
-            return ServerResponse.defeatedRS(100, "参数不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.PARAMETER_NULL.getCode(),Const.UserEnum.PARAMETER_NULL.getDesc());
         }
         if (passwordNew == null || "".equals(passwordNew)) {
-            return ServerResponse.defeatedRS(100, "参数不能为空");
+            return ServerResponse.defeatedRS(Const.UserEnum.PARAMETER_NULL.getCode(),Const.UserEnum.PARAMETER_NULL.getDesc());
         }
 
         //    md5加密
@@ -267,7 +267,7 @@ public class UserServiceImpl implements UserService {
 
         int i = usersMapper.selectByIdAndPassword(users.getId(), md5CodeOld);
         if (i <= 0) {
-            return ServerResponse.defeatedRS("旧密码输入错误");
+            return ServerResponse.defeatedRS(Const.UserEnum.OLD_PSD_WRONG.getCode(),Const.UserEnum.OLD_PSD_WRONG.getDesc());
         }
 
         //    md5加密
@@ -275,8 +275,8 @@ public class UserServiceImpl implements UserService {
 
         int i1 = usersMapper.updateByUsernameAndPassword(users.getUsername(), md5CodeNew);
         if (i1 <= 0) {
-            return ServerResponse.defeatedRS("旧密码更新失败");
+            return ServerResponse.defeatedRS(Const.UserEnum.OLD_PSD_UPDATE_FAIL.getCode(),Const.UserEnum.OLD_PSD_UPDATE_FAIL.getDesc());
         }
-        return ServerResponse.successRS("旧密码更新成功");
+        return ServerResponse.successRS(Const.UserEnum.OLD_PSD_UPDATE_SUCCESS.getCode(),Const.UserEnum.OLD_PSD_UPDATE_SUCCESS.getDesc());
     }
 }

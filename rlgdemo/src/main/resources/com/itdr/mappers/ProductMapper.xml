@@ -229,8 +229,21 @@
         select
         <include refid="Base_Column_List"/>
         from neuedu_product
-        where name like #{param1} or id=#{param2}
+        where name like #{name} or id=#{id}
     </select>
 
+    <!--产品搜索及动态排序List-->
+    <select id="selectByCategoryId" parameterType="integer" resultMap="BaseResultMap">
+
+    </select>
+
+
+    <!--根据父id查询分类-->
+    <select id="selectByPid" parameterType="integer" resultType="com.itdr.pojo.Category">
+        select
+        id, parent_id, name, status, sort_order, create_time, update_time
+        from neuedu_category
+        where parent_id = #{sid}
+    </select>
 
 </mapper>

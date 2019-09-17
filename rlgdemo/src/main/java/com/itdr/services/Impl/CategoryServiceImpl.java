@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /*获取当前分类id及递归子节点*/
     @Override
-    public ServerResponse getDeepCategory(Integer parentId) {
+    public ServerResponse get_deep_category(Integer parentId) {
         ServerResponse sr = null;
         if (parentId == null) {
             sr = ServerResponse.defeatedRS(1,Const.ORDER_PARAMETER_MSG);
@@ -74,8 +74,9 @@ public class CategoryServiceImpl implements CategoryService {
         sr = ServerResponse.successRS(li);
         return sr;
     }
+
     private void getDeepChilds(Integer parentId, List<Integer> li) {
-        List<Category> list = categoryMapper.selectByPd(parentId);
+        List<Category> list = categoryMapper.getChildsByPd(parentId);
         if (list != null && list.size() != 0) {
             for (Category category : list) {
                 li.add(category.getId());
@@ -84,4 +85,5 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
     }
+
 }

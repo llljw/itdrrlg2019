@@ -50,22 +50,22 @@ public class ServerResponse<T> implements Serializable {
 
     //成功的时候只传入数据
     public static <T> ServerResponse successRS(T data) {
-        return new ServerResponse(Const.SUCESS,data);
+        return new ServerResponse(Const.SUCCESS,data);
     }
 
     //成功的时候只传入状态信息
     public static <T> ServerResponse successRS(String msg) {
-        return new ServerResponse(Const.SUCESS,msg);
+        return new ServerResponse(Const.SUCCESS,msg);
     }
 
     //成功的时候传入数据、信息
     public static <T> ServerResponse successRS(T data, String msg) {
-        return new ServerResponse(Const.SUCESS, data, msg);
+        return new ServerResponse(Const.SUCCESS, data, msg);
     }
 
     //失败的时候只要传入状态码和信息
     public static <T> ServerResponse defeatedRS(Integer status, String msg) {
-        return new ServerResponse(Const.ERROR, msg);
+        return new ServerResponse(status, msg);
     }
 
     //失败的时候只要传入信息
@@ -76,7 +76,7 @@ public class ServerResponse<T> implements Serializable {
     //判断
     @JsonIgnore
     public Boolean isSuccess(){
-        return Const.SUCESS == 0;
+        return Const.SUCCESS == 0;
     }
 
 }

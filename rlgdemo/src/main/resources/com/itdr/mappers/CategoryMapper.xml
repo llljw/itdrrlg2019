@@ -120,13 +120,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <!--获取品类子节点-->
-    <select id="selectByPd" parameterType="integer" resultType="com.itdr.pojo.Category">
-        select
-        <include refid="Base_Column_List"/>
-        from neuedu_category
-        where parent_id=#{parentId}
-    </select>
+
 
     <!--修改品类名称-->
     <update id="updateNameByPd" parameterType="com.itdr.pojo.Category">
@@ -152,11 +146,21 @@
         where parent_id = #{parentId,jdbcType=INTEGER}
     </update>
 
+    <!--获取品类子节点-->
+    <select id="selectByPd" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from neuedu_category
+        where parent_id=#{parentId}
+    </select>
+
     <!--获取当前分类id及递归子节点-->
-    <select id="getChildsByPd" parameterType="integer" resultType="integer">
+    <select id="getChildsByPd" parameterType="integer" resultMap="BaseResultMap">
         select
         id
         from neuedu_category
-        where where parent_id = #{parentId,jdbcType=INTEGER}
+        where parent_id = #{parentId}
     </select>
+
+
 </mapper>
