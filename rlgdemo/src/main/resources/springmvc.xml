@@ -18,8 +18,7 @@
     </context:component-scan>
 
     <!--注解驱动-->
-    <!--配置控制
-    前端可以返回json格式的数据-->
+    <!--配置控制前端可以返回json格式的数据-->
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">

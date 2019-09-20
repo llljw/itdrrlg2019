@@ -109,15 +109,16 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="com.itdr.pojo.Category">
-    update neuedu_category
-    set parent_id = #{parentId,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      status = #{status,jdbcType=BIT},
-      sort_order = #{sortOrder,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+        update neuedu_category
+        set parent_id = #{parentId,jdbcType=INTEGER},
+          name = #{name,jdbcType=VARCHAR},
+          status = #{status,jdbcType=BIT},
+          sort_order = #{sortOrder,jdbcType=INTEGER},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
   </update>
 
 
@@ -157,7 +158,7 @@
     <!--获取当前分类id及递归子节点-->
     <select id="getChildsByPd" parameterType="integer" resultMap="BaseResultMap">
         select
-        id
+        <include refid="Base_Column_List"/>
         from neuedu_category
         where parent_id = #{parentId}
     </select>

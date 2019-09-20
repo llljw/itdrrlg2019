@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
     /*订单号查询*/
     @Override
-    public ServerResponse selectOne(Integer orderNo) {
+    public ServerResponse selectOne(Long orderNo) {
         ServerResponse sr = null;
         if (orderNo == null) {
             sr = ServerResponse.defeatedRS(1,Const.ORDER_ORDERNO_FALSE_MSG);

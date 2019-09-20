@@ -30,7 +30,7 @@ public class OrderManageController {
 
     /*订单号查询*/
     @RequestMapping("search.do")
-    public ServerResponse search(Integer order_no) {
+    public ServerResponse search(Long order_no) {
         ServerResponse sr = orderService.selectOne(order_no);
         return sr;
     }

@@ -72,10 +72,11 @@ public class Const {
 
     //    产品相关状态
     public enum ProductEnum {
-        //        Const.ProductEnum.SOLD_OUT.getCode(),Const.ProductEnum.SOLD_OUT.getDesc()
+        //        Const.ProductEnum.NOT_PID.getCode(),Const.ProductEnum.NOT_PID.getDesc()
 
         PARAMETER_WRONG(1, "参数错误"),
-        SOLD_OUT(4, "该商品已下架");
+        SOLD_OUT(4, "该商品已下架"),
+        NOT_PID(1, "查询id不存在");
 
 
         private int code;
@@ -106,17 +107,50 @@ public class Const {
     //    购物车相关状态
     public enum CartEnum {
         //        Const.CartEnum.NO_PRODUCT.getCode(),Const.CartEnum .NO_PRODUCT.getDesc()
-        CHOOSE_NULL(1,"还没有选中任何商品哦~"),
-        PARAMETER_NULL(9,"参数不能为空"),
-        ADD_WRONG(2,"更新数据失败"),
-        NO_PRODUCT(3,"商品不存在");
+        CHOOSE_NULL(1, "还没有选中任何商品哦~"),
+        PARAMETER_NULL(9, "参数不能为空"),
+        ADD_WRONG(2, "更新数据失败"),
+        NO_PRODUCT(3, "商品不存在");
 
         private int code;
         private String desc;
 
-        private CartEnum(int code,String desc){
-            this.code=code;
-            this.desc=desc;
+        private CartEnum(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+    }
+
+    //    支付相关状态
+    public enum PaymentPlatformEnum {
+        //        Const.PaymentPlatformEnum.NO_PRODUCT.getCode(),Const.PaymentPlatformEnum .NO_PRODUCT.getDesc()
+        VERIFY_ORDER_FALSE(1,"不是要付款的订单"),
+        ALIPAY(1,"支付宝"),
+        SAVEPAYMSG_FALSE(1,"支付失败"),
+        NO_PRODUCT(3, "商品不存在");
+
+        private int code;
+        private String desc;
+
+        private PaymentPlatformEnum(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
         }
 
         public int getCode() {
@@ -137,16 +171,18 @@ public class Const {
     }
 
 
-
-
-
-
-
-
     //    常量
     public static final String LOGINUSER = "login_user";
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
+    public static final String TRADE_SUCCESS = "trade_success";
+
+    public interface Cart {
+        String LIMITQUANTITYSUCCESS = "LIMIT_NUM_SUCCESS";
+        String LIMITQUANTITYFAILED = "LIMIT_NUM_FAILED";
+        Integer CHECK = 1;
+        Integer UNCHECK = 0;
+    }
 
 
     //用户相关

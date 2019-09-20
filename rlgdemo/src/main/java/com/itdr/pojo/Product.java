@@ -1,9 +1,12 @@
 package com.itdr.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class Product {
+
     private Integer id;
 
     private Integer categoryId;
@@ -26,9 +29,16 @@ public class Product {
 
     private Boolean isBanner;
 
+    @JsonFormat(locale = "zh",timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    @JsonFormat(locale = "zh",timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    private String subImages;
+
+    private String detail;
+
 
     public Integer getId() {
         return id;
@@ -134,16 +144,12 @@ public class Product {
         this.updateTime = updateTime;
     }
 
-    private String subImages;
-
-    private String detail;
-
     public String getSubImages() {
         return subImages;
     }
 
     public void setSubImages(String subImages) {
-        this.subImages = subImages == null ? null : subImages.trim();
+        this.subImages = subImages;
     }
 
     public String getDetail() {
@@ -151,6 +157,6 @@ public class Product {
     }
 
     public void setDetail(String detail) {
-        this.detail = detail == null ? null : detail.trim();
+        this.detail = detail;
     }
 }

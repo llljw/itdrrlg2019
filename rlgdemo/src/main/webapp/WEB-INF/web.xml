@@ -28,7 +28,7 @@
 
   <servlet-mapping>
     <servlet-name>springmvc</servlet-name>
-    <!-- 设置所有以action结尾的请求进入SpringMVC -->
+    <!-- 设置所有以do结尾的请求进入SpringMVC -->
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
 </web-app>

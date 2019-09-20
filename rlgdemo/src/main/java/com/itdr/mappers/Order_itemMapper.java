@@ -1,6 +1,9 @@
 package com.itdr.mappers;
 
+import com.itdr.pojo.Order;
 import com.itdr.pojo.Order_item;
+
+import java.util.List;
 
 public interface Order_itemMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,7 @@ public interface Order_itemMapper {
     int updateByPrimaryKeySelective(Order_item record);
 
     int updateByPrimaryKey(Order_item record);
+
+
+    List<Order_item> selectByOrderNo(Long oid);
 }

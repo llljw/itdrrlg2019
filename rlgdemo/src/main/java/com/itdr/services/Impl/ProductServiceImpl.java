@@ -1,17 +1,23 @@
 package com.itdr.services.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.itdr.common.Const;
 import com.itdr.common.ServerResponse;
 import com.itdr.mappers.CategoryMapper;
 import com.itdr.mappers.ProductMapper;
+import com.itdr.mappers.UsersMapper;
 import com.itdr.pojo.Category;
 import com.itdr.pojo.Product;
-import com.itdr.services.CategoryService;
+import com.itdr.pojo.vo.ProductVO;
 import com.itdr.services.ProductService;
+import com.itdr.utils.PoToVoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * User: Jwen
@@ -24,10 +30,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMapper productMapper;
-
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /*后端*/
-//    商品列表
+    //    商品列表
     @Override
     public ServerResponse selectAll() {
         List<Product> li = productMapper.selectAll();
@@ -91,37 +98,63 @@ public class ProductServiceImpl implements ProductService {
 
 
     /*前端*/
-//    产品搜索及动态排序List
+    //    产品搜索及动态排序List
     @Override
-    public ServerResponse<Product> list(Product product) {
-        List<Product> products = productMapper.selectByCategoryId(product.getCategoryId());
-        if (products == null) {
+    public ServerResponse<Product> listProduct(Integer productId, String keyWord, Integer pageNum, Integer pageSize, String orderBy) {
+        if ((productId == null || productId < 0) && (keyWord == null || "".equals(keyWord))) {
             return ServerResponse.defeatedRS(Const.ProductEnum.PARAMETER_WRONG.getCode(), Const.ProductEnum.PARAMETER_WRONG.getDesc());
         }
-        return null;
+
+//        分隔排序
+        String[] split = new String[2];
+        if (!"".equals(orderBy)) {
+            split = orderBy.split("_");
+        }
+
+        String keys = "%" + keyWord + "%";
+
+        PageHelper.startPage(pageNum,pageSize,split[0]+" "+split[1]);
+        List<Product> list = productMapper.selectByIdOrName(productId, keys, split[0], split[1]);
+        PageInfo pf = new PageInfo(list);
+
+        return ServerResponse.successRS(pf);
     }
 
     //    产品详情
     @Override
-    public ServerResponse<Product> detail(Product product) {
-        Product product1 = productMapper.selectByPrimaryKey(product.getId());
-        if (product1 == null) {
+    public ServerResponse<Product> detail(Integer productId, Integer is_new, Integer is_hot, Integer is_banner) {
+        if (productId == null || productId <= 0) {
             return ServerResponse.defeatedRS(Const.ProductEnum.PARAMETER_WRONG.getCode(), Const.ProductEnum.PARAMETER_WRONG.getDesc());
         }
-        if (product1.getStatus() == 0) {
+
+        Product product = productMapper.selectById(productId, is_new, is_hot, is_banner);
+
+        if (product.getStatus() == 2) {
             return ServerResponse.defeatedRS(Const.ProductEnum.SOLD_OUT.getCode(), Const.ProductEnum.SOLD_OUT.getDesc());
         }
-        return ServerResponse.successRS(product1);
+
+        ProductVO productVO = null;
+        try {
+            productVO = PoToVoUtil.ProductToProductVO(product);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ServerResponse.successRS(productVO);
     }
 
     //    获取产品分类
     @Override
-    public ServerResponse<Category> topCategory(Integer sid) {
-        if (sid == null) {
-            sid = 0;
+    public ServerResponse<Product> topCategory(Integer sid) {
+        if (sid == null || sid < 0) {
+            return ServerResponse.defeatedRS(Const.ProductEnum.PARAMETER_WRONG.getCode(), Const.ProductEnum.PARAMETER_WRONG.getDesc());
         }
-        List<Category> products = productMapper.selectByPid(sid);
-        return ServerResponse.successRS(products);
+        //    根据商品分类id查询子分类
+        List<Category> list = categoryMapper.getChildsByPd(sid);
+        if (list == null) {
+            return ServerResponse.defeatedRS(Const.ProductEnum.NOT_PID.getCode(), Const.ProductEnum.NOT_PID.getDesc());
+        }
+        return ServerResponse.successRS(list);
     }
 
 

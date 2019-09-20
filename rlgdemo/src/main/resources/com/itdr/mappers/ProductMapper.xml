@@ -7,6 +7,8 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="subtitle" property="subtitle" jdbcType="VARCHAR"/>
         <result column="main_image" property="mainImage" jdbcType="VARCHAR"/>
+        <result column="sub_images" property="subImages" jdbcType="LONGVARCHAR"/>
+        <result column="detail" property="detail" jdbcType="LONGVARCHAR"/>
         <result column="price" property="price" jdbcType="DECIMAL"/>
         <result column="stock" property="stock" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
@@ -15,14 +17,13 @@
         <result column="is_banner" property="isBanner" jdbcType="BIT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="sub_images" property="subImages" jdbcType="LONGVARCHAR"/>
-        <result column="detail" property="detail" jdbcType="LONGVARCHAR"/>
     </resultMap>
+
     <sql id="Base_Column_List">
-    id, category_id, name, subtitle, main_image, price, stock, status, is_new, is_hot, 
-    is_banner, create_time, update_time,sub_images, detail
+    id, category_id, name, subtitle, main_image, sub_images, detail, price, stock, status, is_new, is_hot,
+    is_banner, create_time, update_time
   </sql>
-    <!--根据id查询-->
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -184,7 +185,7 @@
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <!--<if test="updateTime != null">-->
-                <!--update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+            <!--update_time = #{updateTime,jdbcType=TIMESTAMP},-->
             <!--</if>-->
             update_time = now(),
             <if test="subImages != null">
@@ -232,18 +233,56 @@
         where name like #{name} or id=#{id}
     </select>
 
-    <!--产品搜索及动态排序List-->
-    <select id="selectByCategoryId" parameterType="integer" resultMap="BaseResultMap">
+    <!--根据商品id或者名称关键字查询数据-->
+    <select id="selectByIdOrName" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from neuedu_product
+        <where>
+            <if test="productId > 0 ">
+                id = #{productId}
+            </if>
+            <if test="keyWord !='%%' ">
+                or name like #{keyWord}
+            </if>
+            and status = 1
+            <!--<if test="col != null and order != null">-->
+            <!--order by price desc-->
+            <!--</if>-->
+            <!--<if test=" order != null ">-->
+            <!--#{order}-->
+            <!--</if>-->
 
+        </where>
     </select>
 
 
-    <!--根据父id查询分类-->
-    <select id="selectByPid" parameterType="integer" resultType="com.itdr.pojo.Category">
+    <!--&lt;!&ndash;根据父id查询分类&ndash;&gt;-->
+    <!--<select id="selectByPid" parameterType="integer" resultType="com.itdr.pojo.Category">-->
+    <!--select-->
+    <!--id, parent_id, name, status, sort_order, create_time, update_time-->
+    <!--from neuedu_category-->
+    <!--where parent_id = #{sid}-->
+    <!--</select>-->
+
+    <!--根据id查询-->
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
         select
-        id, parent_id, name, status, sort_order, create_time, update_time
-        from neuedu_category
-        where parent_id = #{sid}
+        <include refid="Base_Column_List"/>
+        from neuedu_product
+        <where>
+            id = #{productId}
+            <if test="is_new != 0">
+                and is_new = 1
+            </if>
+            <if test="is_hot != 0">
+                and is_hot = 1
+            </if>
+            <if test="is_banner != 0">
+                and is_banner = 1
+            </if>
+            and status = 1
+        </where>
     </select>
 
 </mapper>

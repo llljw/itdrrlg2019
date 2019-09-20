@@ -6,10 +6,7 @@ import com.itdr.pojo.Users;
 import com.itdr.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,10 +16,9 @@ import javax.servlet.http.HttpSession;
  * Time: 15:57
  */
 
-@Controller
-@ResponseBody
-@RequestMapping("/user/")
 
+@RestController
+@RequestMapping("/user/")
 public class UserController {
 
     @Autowired
@@ -92,7 +88,7 @@ public class UserController {
     }
 
     //    获取当前登录用户的详细信息
-    @GetMapping("get_inforamtion.do")
+    @PostMapping("get_inforamtion.do")
     public ServerResponse<Users> getInforamtion(HttpSession session) {
         Users users = (Users) session.getAttribute(Const.LOGINUSER);
         if (users == null) {
@@ -103,7 +99,7 @@ public class UserController {
     }
 
     //    退出登录
-    @GetMapping("logout.do")
+    @PostMapping("logout.do")
     public ServerResponse<Users> logout(HttpSession session) {
         session.removeAttribute(Const.LOGINUSER);
         return ServerResponse.successRS(Const.UserEnum.LOGIN_OUT_SUCCESS.getCode(),Const.UserEnum.LOGIN_OUT_SUCCESS.getDesc());

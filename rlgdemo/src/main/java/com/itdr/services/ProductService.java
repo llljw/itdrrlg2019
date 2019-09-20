@@ -1,10 +1,10 @@
 package com.itdr.services;
 
-import com.itdr.common.ResponseCode;
 import com.itdr.common.ServerResponse;
-import com.itdr.pojo.Category;
 import com.itdr.pojo.Product;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+
 
 /**
  * User: Jwen
@@ -12,27 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Time: 19:31
  */
 public interface ProductService {
-//    商品列表
+    //    商品列表
     ServerResponse selectAll();
 
-//    根据id或名称商品搜索
+    //    根据id或名称商品搜索
     ServerResponse selectOne(String productName, Integer productId);
 
-//    商品上下架
+    //    商品上下架
     ServerResponse selectByIdSaleStatus(Product p);
 
-//    新增产品
+    //    新增产品
     ServerResponse insertOne(Product p);
 
-//    更新产品
+    //    更新产品
     ServerResponse updateOne(Product p);
 
-//    根据分类ID查询产品
-    ServerResponse<Product> list(Product product);
+    //    产品详情
+    ServerResponse<Product> detail(Integer productId, Integer is_new, Integer is_hot, Integer is_banner) throws IOException;
 
-//    产品详情
-    ServerResponse<Product> detail(Product product);
+    //    获取产品分类
+    ServerResponse<Product> topCategory(Integer sid);
 
-//    获取产品分类
-    ServerResponse<Category> topCategory(Integer sid);
+    //    产品搜索及动态排序List
+    ServerResponse<Product> listProduct(Integer productId, String keyWord, Integer pageNum, Integer pageSize, String orderBy);
+
 }

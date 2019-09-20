@@ -33,21 +33,29 @@ public class CartController {
         if (users == null) {
             return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(), Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
         }
-        ServerResponse<Cart> sr = cartService.list();
+        ServerResponse<Cart> sr = cartService.list(users.getId());
         return sr;
     }
 
     //    购物车添加商品
     @RequestMapping("add.do")
-    public ServerResponse<Cart> add(Integer productId, Integer count, HttpSession session) {
-        ServerResponse<Cart> sr = cartService.insert(productId, count, session);
+    public ServerResponse<Cart> add(Integer productId, Integer count,HttpSession session) {
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(), Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.insert(productId, count,users.getId());
         return sr;
     }
 
     //    更新产品数量
     @RequestMapping("update.do")
     public ServerResponse<Cart> update(Integer productId, Integer count, HttpSession session) {
-        ServerResponse<Cart> sr = cartService.update(productId, count, session);
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(), Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.update(productId, count, users.getId());
         return sr;
     }
 
@@ -55,6 +63,65 @@ public class CartController {
     @RequestMapping("delete_product.do")
     public ServerResponse<Cart> delete(Integer productId, HttpSession session) {
         ServerResponse<Cart> sr = cartService.deleteByProductId(productId, session);
+        return sr;
+    }
+
+    //    查询在购物车里的产品数量
+    @RequestMapping("get_cart_product_count.do")
+    public ServerResponse<Cart> getCartProductCount(HttpSession session) {
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(), Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.getCartProductCount(users.getId());
+        return sr;
+    }
+
+    //    购物车全选
+    @RequestMapping("select_all.do")
+    public ServerResponse<Cart> selectAll(HttpSession session, Integer check) {
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(),
+                    Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.selectOrUnSelect(users.getId(), check, null);
+        return sr;
+    }
+
+    //    购物车取消全选
+    @RequestMapping("un_select_all.do")
+    public ServerResponse<Cart> UnSelectAll(HttpSession session, Integer check) {
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(),
+                    Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.selectOrUnSelect(users.getId(), check, null);
+        return sr;
+    }
+
+    //    购物车选中某个商品
+    @RequestMapping("select.do")
+    public ServerResponse<Cart> select(HttpSession session, Integer check, Integer productId) {
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(),
+                    Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.selectOrUnSelect(users.getId(), check, productId);
+        return sr;
+    }
+
+    //    购物车取消选中某个商品
+    @RequestMapping("un_select.do")
+    public ServerResponse<Cart> UnSelect(HttpSession session, Integer check, Integer productId) {
+        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(),
+                    Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        }
+        ServerResponse<Cart> sr = cartService.selectOrUnSelect(users.getId(), check, productId);
         return sr;
     }
 }

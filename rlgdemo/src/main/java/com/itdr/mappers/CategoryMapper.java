@@ -5,6 +5,7 @@ import com.itdr.pojo.Category;
 import java.util.List;
 
 public interface CategoryMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     /*增加*/

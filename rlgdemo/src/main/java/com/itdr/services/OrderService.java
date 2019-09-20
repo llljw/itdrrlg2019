@@ -15,7 +15,7 @@ public interface OrderService {
     ServerResponse selectAll();
 
     /*按订单号查询*/
-    ServerResponse selectOne(Integer orderNo );
+    ServerResponse selectOne(Long orderNo );
 
     /*id查询*/
     ServerResponse selectOneById(Integer id);

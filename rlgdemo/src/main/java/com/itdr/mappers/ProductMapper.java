@@ -29,11 +29,22 @@ public interface ProductMapper {
     List<Product> selectAll();
 
     //根据id或名称商品搜索
-    List<Product> selectOne(@Param("name") String name,@Param("id") Integer id);
+    List<Product> selectOne(@Param("name") String name, @Param("id") Integer id);
 
     //产品搜索及动态排序List
-    List<Product> selectByCategoryId(Integer categoryId);
+    List<Product> selectByIdOrName(@Param("productId") Integer productId,
+                                   @Param("keyWord") String keyWord,
+                                   @Param("col") String col,
+                                   @Param("order") String order);
 
     //根据父id查询分类
     List<Category> selectByPid(Integer sid);
+
+    //根据商品id获取商品详情
+    Product selectById(@Param("productId") Integer productId,
+                       @Param("is_new") Integer is_new,
+                       @Param("is_hot") Integer is_hot,
+                       @Param("is_banner") Integer is_banner);
+
+
 }
