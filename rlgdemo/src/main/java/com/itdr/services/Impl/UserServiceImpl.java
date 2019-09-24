@@ -33,8 +33,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse selectOne(String username, String password) {
         ServerResponse sr = null;
-        if (username == null || username.equals("") || password == null || password.equals("")) {
-            sr = ServerResponse.defeatedRS(1, Const.USER_NAMEORPSD_NOT_NULL);
+        if (username == null || username.equals("")) {
+            sr = ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
+            return sr;
+        }
+        if (password == null || password.equals("")) {
+            sr = ServerResponse.defeatedRS(Const.UserEnum.PSD_NULL.getCode(),Const.UserEnum.PSD_NULL.getDesc());
             return sr;
         }
         Users users = usersMapper.selectByNameAndPassword(username, password);
@@ -67,7 +71,7 @@ public class UserServiceImpl implements UserService {
         }
 
 //        根据用户名查找是否存在该用户
-        int i = usersMapper.selectByUserNameOrEmail(username,Const.USERNAME);
+        int i = usersMapper.selectByUserNameOrEmail(username,Const.User.LOGINUSER);
         if (i <= 0) {
             return ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
         }
@@ -100,13 +104,13 @@ public class UserServiceImpl implements UserService {
         }
 
         //检查注册用户名是否存在
-        int i2 = usersMapper.selectByUserNameOrEmail(u.getUsername(), Const.USERNAME);
+        int i2 = usersMapper.selectByUserNameOrEmail(u.getUsername(), Const.User.LOGINUSER);
         if (i2 > 0) {
             return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_USER.getCode(),Const.UserEnum.HAVE_ONE_USER.getDesc());
         }
 
         //检查注册邮箱是否存在
-        int i3 = usersMapper.selectByUserNameOrEmail(u.getEmail(), Const.EMAIL);
+        int i3 = usersMapper.selectByUserNameOrEmail(u.getEmail(), Const.User.EMAIL);
         if (i3 > 0) {
             return ServerResponse.defeatedRS(Const.UserEnum.HAVE_ONE_EMAIL.getCode(),Const.UserEnum.HAVE_ONE_EMAIL.getDesc());
         }
@@ -174,7 +178,7 @@ public class UserServiceImpl implements UserService {
         if (username == null || username.equals("")) {
             return ServerResponse.defeatedRS(Const.UserEnum.NAME_NULL.getCode(),Const.UserEnum.NAME_NULL.getDesc());
         }
-        int i = usersMapper.selectByUserNameOrEmail(username, Const.USERNAME);
+        int i = usersMapper.selectByUserNameOrEmail(username, Const.User.LOGINUSER);
         if (i <= 0) {
             return ServerResponse.defeatedRS(Const.UserEnum.NO_USER.getCode(),Const.UserEnum.NO_USER.getDesc());
         }

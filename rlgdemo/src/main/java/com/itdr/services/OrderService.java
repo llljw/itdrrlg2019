@@ -15,8 +15,11 @@ public interface OrderService {
     ServerResponse selectAll();
 
     /*按订单号查询*/
-    ServerResponse selectOne(Long orderNo );
+    ServerResponse selectOne(Long orderNo);
 
     /*id查询*/
     ServerResponse selectOneById(Integer id);
+
+    //创建订单
+    ServerResponse createOrder(Integer shippingId, Integer id);
 }

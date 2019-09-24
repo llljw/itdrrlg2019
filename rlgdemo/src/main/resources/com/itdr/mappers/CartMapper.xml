@@ -143,14 +143,6 @@
         where user_id=#{uid}
     </select>
 
-    <!--根据用户id判断用户购物车是否全选-->
-    <select id="selectByUidCheckAll" parameterType="map" resultType="integer">
-        select
-        count(id)
-        from neuedu_cart
-        where user_id=#{uid} and checked = #{check}
-    </select>
-    
     <!--根据用户id和商品id判断数据是否存在-->
     <select id="selectByProductIdAndUid" parameterType="map" resultMap="BaseResultMap">
         select
@@ -160,12 +152,39 @@
     </select>
 
     <!--根据商品ID删除商品-->
-    <delete id="deleteByProductId" parameterType="com.itdr.pojo.Cart">
+    <delete id="deleteByProductId" parameterType="map">
         delete from neuedu_cart
-        where product_id = #{productId}
+        <where>
+            user_id = #{id}
+            <if test="productIds != null">
+                and product_id in
+                <foreach collection="productIds" item="productId" open="(" separator="," close=")">
+                    #{productId}
+                </foreach>
+            </if>
+        </where>
     </delete>
 
-    <!---->
+
+    <!--根据id获取选中商品数据-->
+    <select id="selectByUidAll" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from neuedu_cart
+        where user_id=#{uid} and checked = 1
+    </select>
+
+
+    <!--根据用户id判断用户购物车是否全选-->
+    <select id="selectByUidCheckAll" parameterType="map" resultType="integer">
+        select
+        count(id)
+        from neuedu_cart
+        where user_id=#{uid} and checked = #{check}
+    </select>
+
+
+    <!--改变购物车中商品选择状态-->
     <update id="selectOrUnSelect" parameterType="map">
       update neuedu_cart
       set
@@ -176,5 +195,19 @@
            and product_id=#{productId}
         </if>
     </update>
+
+    <!--根据id删除-->
+    <delete id="deleteAllByIdAndUid" parameterType="map">
+        delete from neuedu_cart
+        <where>
+            user_id = #{uid}
+            <if test="cartList != null">
+                and id in
+                <foreach collection="cartList" item="cart" open="(" separator="," close=")">
+                    #{cart.id}
+                </foreach>
+            </if>
+        </where>
+    </delete>
 
 </mapper>

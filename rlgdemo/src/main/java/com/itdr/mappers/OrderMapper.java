@@ -22,9 +22,10 @@ public interface OrderMapper {
     List<Order> selectAll();
 
     /*订单号查询*/
-    Order selectByOrderNo(Long orderno);
+    Order selectByOrderNo(Long orderNo);
 
 
     //根据订单号和用户ID查询是否匹配
-    int selectByOrderNoAndUid(@Param("orderno") Long orderno, @Param("uid") Integer uid);
+    int selectByOrderNoAndUid(@Param("orderNo") Long orderNo, @Param("uid") Integer uid);
+
 }

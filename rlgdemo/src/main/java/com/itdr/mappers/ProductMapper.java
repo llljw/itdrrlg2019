@@ -22,7 +22,7 @@ public interface ProductMapper {
     //更新商品
     int updateByPrimaryKeySelective(Product record);
 
-    //更新所有商品
+    //更新商品
     int updateByPrimaryKey(Product record);
 
     //商品列表
@@ -47,4 +47,6 @@ public interface ProductMapper {
                        @Param("is_banner") Integer is_banner);
 
 
+    //根据商品id获取商品数据
+    Product selectByIdAll(Integer productId);
 }

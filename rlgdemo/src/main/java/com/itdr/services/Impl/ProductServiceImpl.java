@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> li = productMapper.selectOne("%" + productName + "%", productId);
         /*判断商品是否存在*/
         if (li == null || li.size() == 0) {
-            sr = ServerResponse.defeatedRS(1, Const.PRODUCT_NO_MSG);
+            sr = ServerResponse.defeatedRS(Const.ProductEnum.PRODUCT_NO.getCode(),Const.ProductEnum.PRODUCT_NO.getDesc());
             return sr;
         }
         sr = ServerResponse.successRS(li);
@@ -63,10 +63,10 @@ public class ProductServiceImpl implements ProductService {
         /*产品上下架*/
         int i = productMapper.updateByPrimaryKeySelective(p);
         if (i <= 0) {
-            sr = ServerResponse.defeatedRS(1, Const.PRODUCT_AMEND_FAILED_MSG);
+            sr = ServerResponse.defeatedRS(Const.ProductEnum.AMEND_FAILED.getCode(),Const.ProductEnum.AMEND_FAILED.getDesc());
             return sr;
         }
-        sr = ServerResponse.successRS(0, Const.PRODUCT_AMEND_MSG);
+        sr = ServerResponse.successRS(Const.ProductEnum.AMEND_SUCCESS.getCode(),Const.ProductEnum.AMEND_SUCCESS.getDesc());
         return sr;
     }
 
@@ -76,10 +76,10 @@ public class ProductServiceImpl implements ProductService {
         ServerResponse sr = null;
         int i = productMapper.insert(p);
         if (i <= 0) {
-            sr = ServerResponse.defeatedRS(Const.PRODUCT_APPEND_FAILED_MSG);
+            sr = ServerResponse.defeatedRS(Const.ProductEnum.APPEND_FAILED.getCode(),Const.ProductEnum.APPEND_FAILED.getDesc());
             return sr;
         }
-        sr = ServerResponse.successRS(Const.PRODUCT_APPEND_MSG);
+        sr = ServerResponse.successRS(Const.ProductEnum.APPEND_SUCCESS.getCode(),Const.ProductEnum.APPEND_SUCCESS.getDesc());
         return sr;
     }
 
@@ -89,10 +89,10 @@ public class ProductServiceImpl implements ProductService {
         ServerResponse sr = null;
         int i = productMapper.updateByPrimaryKeySelective(p);
         if (i <= 0) {
-            sr = ServerResponse.defeatedRS(Const.PRODUCT_UPDATE_FAILED_MSG);
+            sr = ServerResponse.defeatedRS(Const.ProductEnum.UPDATE_FAILED.getCode(),Const.ProductEnum.UPDATE_FAILED.getDesc());
             return sr;
         }
-        sr = ServerResponse.successRS(Const.PRODUCT_UPDATE_MSG);
+        sr = ServerResponse.successRS(Const.ProductEnum.UPDATE_SUCCESS.getCode(),Const.ProductEnum.UPDATE_SUCCESS.getDesc());
         return sr;
     }
 

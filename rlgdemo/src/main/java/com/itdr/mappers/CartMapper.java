@@ -28,7 +28,7 @@ public interface CartMapper {
     Cart selectByProductId(Integer productId);
 
     //    根据商品id删除
-    int deleteByProductId(Integer productId);
+    int deleteByProductId(@Param("productIds") List<String> productIds, @Param("id") Integer id);
 
     //    根据用户id查询所有购物数据
     List<Cart> selectByUid(Integer id);
@@ -41,5 +41,11 @@ public interface CartMapper {
     Cart selectByProductIdAndUid(@Param("productId") Integer productId, @Param("uid") Integer uid);
 
     //    根据用户id判断用户购物车是否全选
-    int selectByUidCheckAll(@Param("uid")Integer uid,@Param("check")Integer check);
+    int selectByUidCheckAll(@Param("uid") Integer uid, @Param("check") Integer check);
+
+
+    List<Cart> selectByUidAll(Integer uid);
+
+    //根据id删除
+    int deleteAllByIdAndUid(@Param("cartList") List<Cart> cartList, @Param("uid") Integer uid);
 }

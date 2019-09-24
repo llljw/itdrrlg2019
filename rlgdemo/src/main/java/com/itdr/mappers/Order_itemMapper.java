@@ -2,6 +2,7 @@ package com.itdr.mappers;
 
 import com.itdr.pojo.Order;
 import com.itdr.pojo.Order_item;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface Order_itemMapper {
 
 
     List<Order_item> selectByOrderNo(Long oid);
+
+    int insertAll(@Param("orderItem") List<Order_item> orderItem);
 }

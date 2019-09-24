@@ -198,7 +198,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <!--更新所有-->
+    <!--更新商品-->
     <update id="updateByPrimaryKey" parameterType="com.itdr.pojo.Product">
     update neuedu_product
     set category_id = #{categoryId,jdbcType=INTEGER},
@@ -283,6 +283,14 @@
             </if>
             and status = 1
         </where>
+    </select>
+
+    <!--根据商品id获取商品数据-->
+    <select id="selectByIdAll" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from neuedu_product
+        where id = #{productId}
     </select>
 
 </mapper>

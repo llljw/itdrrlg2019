@@ -111,6 +111,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.itdr.pojo.Order_item" >
     update neuedu_order_item
     <set >
@@ -162,7 +163,21 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <!---->
+  <insert id="insertAll" parameterType="list">
+    insert into neuedu_order_item
+    (id, user_id, order_no,
+    product_id, product_name, product_image,
+    current_unit_price, quantity, total_price,
+    create_time, update_time)
+    values
+    <foreach collection="orderItem" item="item" separator=",">
+      (null,#{item.userId},#{item.orderNo},#{item.productId},#{item.productName},#{item.productImage},
+      #{item.currentUnitPrice},#{item.quantity},#{item.totalPrice},now(),now())
+    </foreach>
+  </insert>
 
+  <!--根据订单号查询所有数据-->
   <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="map" >
     select
     <include refid="Base_Column_List" />

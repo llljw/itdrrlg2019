@@ -31,7 +31,7 @@ public class UserController {
         //当返回的是成功状态才执行
         if (sr.isSuccess()) {
             Users users = sr.getData();
-            session.setAttribute(Const.LOGINUSER, sr.getData());
+            session.setAttribute(Const.User.LOGINUSER, sr.getData());
 
             Users users2 = new Users();
 
@@ -65,7 +65,7 @@ public class UserController {
     //    获取用户登录信息
     @GetMapping("get_user_info.do")
     public ServerResponse getUserInfo(HttpSession session) {
-        Users user = (Users) session.getAttribute(Const.LOGINUSER);
+        Users user = (Users) session.getAttribute(Const.User.LOGINUSER);
         if (user == null) {
             return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN.getCode(), Const.UserEnum.NOT_LOGIN.getDesc());
         }
@@ -75,7 +75,7 @@ public class UserController {
     //    登录状态更新个人信息
     @PostMapping("update_information.do")
     public ServerResponse<Users> updateInformation(Users users, HttpSession session) {
-        Users users2 = (Users) session.getAttribute(Const.LOGINUSER);
+        Users users2 = (Users) session.getAttribute(Const.User.LOGINUSER);
         if (users2 == null) {
             return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN.getCode(), Const.UserEnum.NOT_LOGIN.getDesc());
         }
@@ -83,14 +83,14 @@ public class UserController {
         users.setUsername(users2.getUsername());
         ServerResponse sr = userService.update_information(users);
 //        将更新后的用户存入session
-        session.setAttribute(Const.LOGINUSER, users);
+        session.setAttribute(Const.User.LOGINUSER, users);
         return sr;
     }
 
     //    获取当前登录用户的详细信息
     @PostMapping("get_inforamtion.do")
     public ServerResponse<Users> getInforamtion(HttpSession session) {
-        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        Users users = (Users) session.getAttribute(Const.User.LOGINUSER);
         if (users == null) {
             return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN.getCode(), Const.UserEnum.NOT_LOGIN.getDesc());
         }
@@ -101,7 +101,7 @@ public class UserController {
     //    退出登录
     @PostMapping("logout.do")
     public ServerResponse<Users> logout(HttpSession session) {
-        session.removeAttribute(Const.LOGINUSER);
+        session.removeAttribute(Const.User.LOGINUSER);
         return ServerResponse.successRS(Const.UserEnum.LOGIN_OUT_SUCCESS.getCode(),Const.UserEnum.LOGIN_OUT_SUCCESS.getDesc());
     }
 
@@ -129,9 +129,9 @@ public class UserController {
     //    登录中状态重置密码
     @PostMapping("reset_password.do")
     public ServerResponse<Users> resetPassword(String passwordOld, String passwordNew,HttpSession session) {
-        Users users = (Users) session.getAttribute(Const.LOGINUSER);
+        Users users = (Users) session.getAttribute(Const.User.LOGINUSER);
         if(users == null){
-            return ServerResponse.defeatedRS(Const.USER_NO_LOGIN_NO_MSG);
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(),Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
         }else {
             return userService.resetPassword(users,passwordOld,passwordNew);
         }

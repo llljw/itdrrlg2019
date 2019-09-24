@@ -28,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
         ServerResponse sr = null;
         List<Category> li = categoryMapper.selectByPd(parentId);
         if (li == null) {
-            sr = ServerResponse.defeatedRS(1,Const.CATEGORY_PID_NO_MSG);
+            sr = ServerResponse.defeatedRS(Const.CategoryEnum.PID_NO.getCode(),Const.CategoryEnum .PID_NO.getDesc());
             return sr;
         }
         sr = ServerResponse.successRS(li);
@@ -41,10 +41,10 @@ public class CategoryServiceImpl implements CategoryService {
         ServerResponse sr = null;
         int i = categoryMapper.insert(c);
         if (i <= 0) {
-            sr = ServerResponse.defeatedRS(1,Const.CATEGOR_ADD_FAILED_MSG);
+            sr = ServerResponse.defeatedRS(Const.CategoryEnum.ADD_FAILED.getCode(),Const.CategoryEnum .ADD_FAILED.getDesc());
             return sr;
         }
-        sr = ServerResponse.successRS(0,Const.CATEGOR_ADD_MSG);
+        sr = ServerResponse.successRS(Const.CategoryEnum.ADD.getCode(),Const.CategoryEnum .ADD.getDesc());
         return sr;
     }
 
@@ -54,10 +54,10 @@ public class CategoryServiceImpl implements CategoryService {
         ServerResponse sr = null;
         int i = categoryMapper.updateNameByPd(c);
         if (i <= 0) {
-            sr = ServerResponse.defeatedRS(1,Const.CATEGOR_UPDATEPNAME_FAILED_MSG);
+            sr = ServerResponse.defeatedRS(Const.CategoryEnum.UPDATEPNAME_FAILED.getCode(),Const.CategoryEnum.UPDATEPNAME_FAILED.getDesc());
             return sr;
         }
-        sr = ServerResponse.successRS(0,Const.CATEGOR_UPDATEPNAME_MSG);
+        sr = ServerResponse.successRS(Const.CategoryEnum.UPDATEPNAME.getCode(),Const.CategoryEnum.UPDATEPNAME.getDesc());
         return sr;
     }
 
@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
     public ServerResponse get_deep_category(Integer parentId) {
         ServerResponse sr = null;
         if (parentId == null) {
-            sr = ServerResponse.defeatedRS(1,Const.ORDER_PARAMETER_MSG);
+            sr = ServerResponse.defeatedRS(Const.OrderEnum.PARAMETER_NULL.getCode(),Const.OrderEnum .PARAMETER_NULL.getDesc());
             return sr;
         }
         List<Integer> li = new ArrayList<>();
