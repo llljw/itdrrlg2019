@@ -2,6 +2,7 @@ package com.itdr.mappers;
 
 import com.itdr.pojo.Order;
 import com.itdr.pojo.Order_item;
+import com.itdr.pojo.vo.OrderItemVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,8 +20,13 @@ public interface Order_itemMapper {
 
     int updateByPrimaryKey(Order_item record);
 
-
+    //根据订单编号查询
     List<Order_item> selectByOrderNo(Long oid);
 
+
+
+
     int insertAll(@Param("orderItem") List<Order_item> orderItem);
+    //根据订单编号和id查询
+    List<Order_item> selectByUidAndOrderNo(@Param("uid") Integer uid,@Param("orderNo") Long orderNo);
 }

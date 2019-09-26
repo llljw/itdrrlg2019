@@ -6,10 +6,8 @@ import com.alipay.api.domain.OrderItem;
 import com.itdr.common.Const;
 import com.itdr.pojo.*;
 import com.itdr.pojo.pay.BizContent;
-import com.itdr.pojo.vo.CartProductVO;
-import com.itdr.pojo.vo.OrderItemVO;
-import com.itdr.pojo.vo.ProductVO;
-import com.itdr.pojo.vo.ShippingVO;
+import com.itdr.pojo.vo.*;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -188,4 +186,40 @@ public class PoToVoUtil {
 
         return shippingVO;
     }
+
+    public static OrderVO orderToOrderVO(List<OrderItemVO> list,ShippingVO shippingVO,
+                                         Order order,Integer shippingId){
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderItemVoList(list);
+        orderVO.setShippingVo(shippingVO);
+        orderVO.setOrderNo(order.getOrderNo());
+        orderVO.setShippingId(shippingId);
+        orderVO.setPayment(order.getPayment());
+        orderVO.setPaymentType(order.getPaymentType());
+        orderVO.setPostage(order.getPostage());
+        orderVO.setStatus(order.getStatus());
+        orderVO.setPaymentTime(null);
+        orderVO.setSendTime(null);
+        orderVO.setCloseTime(null);
+        orderVO.setCreateTime(DateUtils.dateToStr(order.getCreateTime()));
+        orderVO.setEndTime(null);
+        try {
+            orderVO.setImageHost(PropertiesUtil.getValue("imageHost"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return orderVO;
+    }
+
+//    public static OrderMsgVO orderToOrderMsgVO(List<OrderItemVO> list) throws IOException {
+//
+//        OrderMsgVO orderMsgVO = new OrderMsgVO();
+//        orderMsgVO.setOrderItemVoList(list);
+//        orderMsgVO.setImageHost(PropertiesUtil.getValue("imageHost"));
+//        orderMsgVO.setProductTotalPrice();
+//
+//
+//        return null;
+//    }
 }

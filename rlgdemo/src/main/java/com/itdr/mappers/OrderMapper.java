@@ -28,4 +28,8 @@ public interface OrderMapper {
     //根据订单号和用户ID查询是否匹配
     int selectByOrderNoAndUid(@Param("orderNo") Long orderNo, @Param("uid") Integer uid);
 
+    List<Order> selectByUid(Integer id);
+
+    //更改状态码
+    int updateToStatus(Order order);
 }

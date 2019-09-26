@@ -22,4 +22,13 @@ public interface OrderService {
 
     //创建订单
     ServerResponse createOrder(Integer shippingId, Integer id);
+
+    //获取订单的商品信息
+    ServerResponse getOrderCartProduct(Integer uid,Long orderNo);
+
+    //获取订单列表
+    ServerResponse getOrderList(Integer id,Integer pageNum,Integer pageSize);
+
+    //取消订单
+    ServerResponse countermandOrder(Integer id,Long orderNo);
 }

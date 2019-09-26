@@ -184,4 +184,13 @@
     from neuedu_order_item
     where order_no = #{oid}
   </select>
+
+  <!--根据订单号和id查询所有数据-->
+  <select id="selectByUidAndOrderNo" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from neuedu_order_item
+    where user_id = #{uid} and order_no = #{orderNo}
+  </select>
+
 </mapper>

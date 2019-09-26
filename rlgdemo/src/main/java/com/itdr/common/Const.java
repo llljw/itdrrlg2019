@@ -169,10 +169,14 @@ public class Const {
 
     //订单相关状态
     public enum OrderEnum {
-        //Const.OrderEnum.EMPTY_CART_FAILED.getCode(),Const.OrderEnum.EMPTY_CART_FAILED.getDesc()
+        //Const.OrderEnum.ORDER_OFF_SUCCESS.getCode(),Const.OrderEnum.ORDER_OFF_SUCCESS.getDesc()
         PARAMETER_NULL(9, "参数不能为空"),
+        ILLEGALITY_PARAMETER(1,"非法参数"),
         ID_FALSE(1, "订单ID有误"),
         NUM_FALSE(1, "订单号有误"),
+        ORDER_OFF_SUCCESS(1,"订单取消成功"),
+        ORDER_OFF_FAILED(1,"订单取消失败"),
+        ILLEGALITY_STATUS(1,"订单状态非法"),
         CREATE_ORDER_FAILED(1,"订单创建失败"),
         CREATE_ORDER_DETAILS_FAILED(1,"订单详情创建失败"),
         ORDER_NO(1, "订单不存在"),
@@ -183,8 +187,8 @@ public class Const {
         NO_PRODUCT(1,"商品不存在"),
         EMPTY_CART_FAILED(1,"清空购物车失败"),
         SHIPPING_ADD_NONE(1,"用户收货地址不存在"),
-        SUCCESSFUL_DELIBERY(1, "发货成功"),
-        FEFEATED_DELIBERY(1, "发货失败");
+        SUCCESS_DELIBERY(1, "发货成功"),
+        FAILED_DELIBERY(1, "发货失败");
 
         private int code;
         private String desc;

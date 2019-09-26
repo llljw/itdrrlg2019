@@ -136,6 +136,8 @@
       </if>
     </trim>
   </insert>
+
+
   <update id="updateByPrimaryKeySelective" parameterType="com.itdr.pojo.Order" >
     update neuedu_order
     <set >
@@ -175,9 +177,7 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now()
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -216,6 +216,21 @@
     where order_no = #{orderNo} and user_id=#{uid}
   </select>
 
+  <select id="selectByUid" parameterType="integer" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from neuedu_order
+    where user_id = #{id}
+  </select>
 
+  <!--更改状态码-->
+  <update id="updateToStatus" parameterType="com.itdr.pojo.Order" >
+    update neuedu_order
+    set
+      status = #{status,jdbcType=INTEGER},
+      close_time = now(),
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 
 </mapper>
