@@ -35,7 +35,7 @@ public class Const {
         NO_TOKEN(104, "非法的token"),
         LOSE_TOKEN(103, "token已失效"),
         ALTER_PSD_FAIL(100, "修改密码失败"),
-        ALTER_PSD_SUCCESS(100, "修改密码失败"),
+        ALTER_PSD_SUCCESS(0, "修改密码成功"),
         PARAMETER_NULL(100, "参数不能为空"),
         OLD_PSD_WRONG(1, "旧密码更新失败"),
         OLD_PSD_UPDATE_FAIL(0, "旧密码更新失败"),

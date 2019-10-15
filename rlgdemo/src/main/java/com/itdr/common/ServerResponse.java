@@ -74,9 +74,9 @@ public class ServerResponse<T> implements Serializable {
     }
 
     //判断
-    @JsonIgnore
-    public Boolean isSuccess(){
-        return Const.SUCCESS == 0;
-    }
+//    @JsonIgnore
+//    public Boolean isSuccess(){
+//        return Const.SUCCESS == 0;
+//    }
 
 }

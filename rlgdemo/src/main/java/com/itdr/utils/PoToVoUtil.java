@@ -35,7 +35,7 @@ public class PoToVoUtil {
         pvo.setPrice(p.getPrice());
         pvo.setStatus(p.getStatus());
         pvo.setStock(p.getStock());
-        pvo.setSubImages(p.getSubImages());
+        pvo.setSubImages(p.getSubImages().split(","));
         pvo.setSubtitle(p.getSubtitle());
         pvo.setUpdateTime(DateUtils.dateToStr(p.getUpdateTime()));
 

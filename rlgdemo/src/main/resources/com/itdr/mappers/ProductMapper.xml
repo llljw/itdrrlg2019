@@ -246,12 +246,6 @@
                 or name like #{keyWord}
             </if>
             and status = 1
-            <!--<if test="col != null and order != null">-->
-            <!--order by price desc-->
-            <!--</if>-->
-            <!--<if test=" order != null ">-->
-            <!--#{order}-->
-            <!--</if>-->
 
         </where>
     </select>
@@ -272,17 +266,17 @@
         from neuedu_product
         <where>
             id = #{productId}
-            <if test="is_new != 0">
-                and is_new = 1
-            </if>
-            <if test="is_hot != 0">
-                and is_hot = 1
-            </if>
-            <if test="is_banner != 0">
-                and is_banner = 1
-            </if>
             and status = 1
         </where>
+    </select>
+
+    <!--最热等展示商品-->
+    <select id="selectByNewOrHotOrBanner" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from neuedu_product
+        where is_new=#{new} and is_hot=#{hot} and is_banner=#{banner} and status = 1
+
     </select>
 
     <!--根据商品id获取商品数据-->

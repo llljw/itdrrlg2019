@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * Time: 11:33
  */
 @RestController
-@RequestMapping("/order/")
+@RequestMapping("/portal/order/")
 public class OrderController {
     @Autowired
     OrderService orderService;

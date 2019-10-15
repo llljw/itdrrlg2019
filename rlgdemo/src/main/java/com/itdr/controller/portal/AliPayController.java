@@ -28,7 +28,7 @@ import java.util.Set;
  */
 
 @RestController
-@RequestMapping("/pay/")
+@RequestMapping("/portal/pay/")
 public class AliPayController {
     @Autowired
     AliPayService aliPayService;
@@ -99,7 +99,7 @@ public class AliPayController {
         //验签通过,去业务层
         ServerResponse sr = aliPayService.alipayCallback(newMap);
 
-        if(sr.isSuccess()){
+        if(sr.getStatus()==0){
             return "SUCCESS";
         }else {
             return "FAILED";

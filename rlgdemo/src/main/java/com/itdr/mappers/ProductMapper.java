@@ -41,12 +41,13 @@ public interface ProductMapper {
     List<Category> selectByPid(Integer sid);
 
     //根据商品id获取商品详情
-    Product selectById(@Param("productId") Integer productId,
-                       @Param("is_new") Integer is_new,
-                       @Param("is_hot") Integer is_hot,
-                       @Param("is_banner") Integer is_banner);
+    Product selectById(@Param("productId") Integer productId);
 
 
     //根据商品id获取商品数据
     Product selectByIdAll(Integer productId);
+
+    List<Product> selectByNewOrHotOrBanner(@Param("new") Integer is_new,
+                                           @Param("hot") Integer is_hot,
+                                           @Param("banner") Integer is_banner);
 }

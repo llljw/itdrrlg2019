@@ -18,18 +18,19 @@ import javax.servlet.http.HttpSession;
 
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/portal/user/")
 public class UserController {
 
     @Autowired
     UserService userService;
 
     //    用户登录
-    @PostMapping("login.do")
+    @RequestMapping("login.do")
     public ServerResponse<Users> login(String username, String password, HttpSession session) {
         ServerResponse<Users> sr = userService.login(username, password);
+
         //当返回的是成功状态才执行
-        if (sr.isSuccess()) {
+        if (sr.getStatus() == 0) {
             Users users = sr.getData();
             session.setAttribute(Const.User.LOGINUSER, sr.getData());
 
@@ -49,21 +50,21 @@ public class UserController {
     }
 
     //    用户注册
-    @PostMapping("register.do")
+    @RequestMapping("register.do")
     public ServerResponse<Users> register(Users u) {
         ServerResponse<Users> sr = userService.register(u);
         return sr;
     }
 
     //    检查用户名/邮箱是否有效
-    @PostMapping("check_valid.do")
+    @RequestMapping("check_valid.do")
     public ServerResponse<Users> checkValid(String str, String type) {
         ServerResponse<Users> sr = userService.check_valid(str, type);
         return sr;
     }
 
     //    获取用户登录信息
-    @GetMapping("get_user_info.do")
+    @RequestMapping("get_user_info.do")
     public ServerResponse getUserInfo(HttpSession session) {
         Users user = (Users) session.getAttribute(Const.User.LOGINUSER);
         if (user == null) {
@@ -73,7 +74,7 @@ public class UserController {
     }
 
     //    登录状态更新个人信息
-    @PostMapping("update_information.do")
+    @RequestMapping("update_information.do")
     public ServerResponse<Users> updateInformation(Users users, HttpSession session) {
         Users users2 = (Users) session.getAttribute(Const.User.LOGINUSER);
         if (users2 == null) {
@@ -88,7 +89,7 @@ public class UserController {
     }
 
     //    获取当前登录用户的详细信息
-    @PostMapping("get_inforamtion.do")
+    @RequestMapping("get_inforamtion.do")
     public ServerResponse<Users> getInforamtion(HttpSession session) {
         Users users = (Users) session.getAttribute(Const.User.LOGINUSER);
         if (users == null) {
@@ -99,41 +100,41 @@ public class UserController {
     }
 
     //    退出登录
-    @PostMapping("logout.do")
+    @RequestMapping("logout.do")
     public ServerResponse<Users> logout(HttpSession session) {
         session.removeAttribute(Const.User.LOGINUSER);
-        return ServerResponse.successRS(Const.UserEnum.LOGIN_OUT_SUCCESS.getCode(),Const.UserEnum.LOGIN_OUT_SUCCESS.getDesc());
+        return ServerResponse.successRS(Const.UserEnum.LOGIN_OUT_SUCCESS.getCode(), Const.UserEnum.LOGIN_OUT_SUCCESS.getDesc());
     }
 
     //    忘记密码
-    @PostMapping("forget_get_question.do")
+    @RequestMapping("forget_get_question.do")
     public ServerResponse<Users> forgetGetQuestion(String username) {
         ServerResponse<Users> sr = userService.forgetGetQuestion(username);
         return sr;
     }
 
     //    提交问题答案
-    @PostMapping("forget_check_answer.do")
+    @RequestMapping("forget_check_answer.do")
     public ServerResponse<Users> forgetCheckAnswer(String username, String question, String answer) {
         ServerResponse<Users> sr = userService.forgetCheckAnswer(username, question, answer);
         return sr;
     }
 
     //    忘记密码的重设密码
-    @PostMapping("forget_reset_password.do")
+    @RequestMapping("forget_reset_password.do")
     public ServerResponse<Users> forgetResetPassword(String username, String passwordNew, String forgetToken) {
         ServerResponse<Users> sr = userService.forgetResetPassword(username, passwordNew, forgetToken);
         return sr;
     }
 
     //    登录中状态重置密码
-    @PostMapping("reset_password.do")
-    public ServerResponse<Users> resetPassword(String passwordOld, String passwordNew,HttpSession session) {
+    @RequestMapping("reset_password.do")
+    public ServerResponse<Users> resetPassword(String passwordOld, String passwordNew, HttpSession session) {
         Users users = (Users) session.getAttribute(Const.User.LOGINUSER);
-        if(users == null){
-            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(),Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
-        }else {
-            return userService.resetPassword(users,passwordOld,passwordNew);
+        if (users == null) {
+            return ServerResponse.defeatedRS(Const.UserEnum.NOT_LOGIN_BUT_HAVE.getCode(), Const.UserEnum.NOT_LOGIN_BUT_HAVE.getDesc());
+        } else {
+            return userService.resetPassword(users, passwordOld, passwordNew);
         }
     }
 

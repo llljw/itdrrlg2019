@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @ResponseBody
-@RequestMapping("/cart/")
+@RequestMapping("/portal/cart/")
 public class CartController {
 
     @Autowired

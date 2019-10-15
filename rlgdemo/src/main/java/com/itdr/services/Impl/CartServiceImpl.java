@@ -101,7 +101,7 @@ public class CartServiceImpl implements CartService {
         if (list.size() != 0) {
             for (Cart cart : list) {
                 //根据购物信息中的商品id查询商品数据
-                Product product = productMapper.selectById(cart.getProductId(), 0, 0, 0);
+                Product product = productMapper.selectById(cart.getProductId());
 
                 //使用工具类进行数据封装
                 CartProductVO cartProductVO = PoToVoUtil.getOne(cart, product);
